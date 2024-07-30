@@ -2,16 +2,14 @@
   import { onMount } from 'svelte';
   import { navigate } from 'svelte-routing';
   import ProductCard from './ProductCard.svelte';
+  import { sorting, filterItem, searchTerm } from '../stores.js';
+  import { get } from 'svelte/store';
 
   let products = [];
   let filteredProducts = [];
   let categories = [];
   let loading = true;
   let error = null;
-
-  let sorting = 'default';
-  let filterItem = 'All categories';
-  let searchTerm = '';
 
   const fetchProducts = async () => {
     loading = true;
@@ -25,6 +23,7 @@
       products = data;
       filteredProducts = data;
       categories = [...new Set(data.map(product => product.category))];
+      applyFiltersAndSorting();
     } catch (err) {
       error = err.message;
     } finally {
@@ -32,26 +31,22 @@
     }
   };
 
-  const sortProducts = () => {
-    if (sorting === 'low') {
-      filteredProducts = [...filteredProducts].sort((a, b) => a.price - b.price);
-    } else if (sorting === 'high') {
-      filteredProducts = [...filteredProducts].sort((a, b) => b.price - a.price);
-    }
-  };
+  const applyFiltersAndSorting = () => {
+    let tempProducts = products.filter(product => get(filterItem) === 'All categories' || product.category === get(filterItem));
 
-  const filterProducts = () => {
-    filteredProducts = products.filter(product => filterItem === 'All categories' || product.category === filterItem);
-    if (searchTerm) {
-      filteredProducts = filteredProducts.filter(product =>
-        product.title.toLowerCase().includes(searchTerm.toLowerCase())
+    if (get(searchTerm)) {
+      tempProducts = tempProducts.filter(product =>
+        product.title.toLowerCase().includes(get(searchTerm).toLowerCase())
       );
     }
-    sortProducts();
-  };
 
-  const searchProducts = () => {
-    filterProducts();
+    if (get(sorting) === 'low') {
+      tempProducts = tempProducts.sort((a, b) => a.price - b.price);
+    } else if (get(sorting) === 'high') {
+      tempProducts = tempProducts.sort((a, b) => b.price - a.price);
+    }
+
+    filteredProducts = tempProducts;
   };
 
   onMount(() => {
@@ -66,13 +61,13 @@
 <div>
   <div class="controls mb-10 flex justify-between items-center mt-8">
     <div class="flex space-x-4">
-      <select bind:value={sorting} on:change={filterProducts} class="p-2 border border-gray-300 rounded">
+      <select bind:value={$sorting} on:change={applyFiltersAndSorting} class="p-2 border border-gray-300 rounded">
         <option value="default">Default</option>
         <option value="low">Price: Low to High</option>
         <option value="high">Price: High to Low</option>
       </select>
 
-      <select bind:value={filterItem} on:change={filterProducts} class="p-2 border border-gray-300 rounded">
+      <select bind:value={$filterItem} on:change={applyFiltersAndSorting} class="p-2 border border-gray-300 rounded">
         <option value="All categories">All categories</option>
         {#each categories as category}
           <option value={category}>{category}</option>
@@ -80,7 +75,7 @@
       </select>
     </div>
 
-    <input type="text" placeholder="Search" bind:value={searchTerm} on:input={searchProducts} class="p-2 border border-gray-300 rounded-full bg-green-100 placeholder-gray-500 placeholder-opacity-75 search-bar">
+    <input type="text" placeholder="Search" bind:value={$searchTerm} on:input={applyFiltersAndSorting} class="p-2 border border-gray-300 rounded-full bg-green-100 placeholder-gray-500 placeholder-opacity-75 search-bar">
   </div>
 
   {#if loading}
@@ -121,7 +116,7 @@
   }
 
   .product-card-button:hover {
-    background-color: bisque;
+    /* Add hover effects if needed */
   }
 
   .product-card-button:focus {
@@ -133,7 +128,7 @@
   }
 
   /* Ensure product cards are equal in size */
-  .product-card-button  {
+  .product-card-button {
     height: 100%;
     display: flex;
     flex-direction: column;
