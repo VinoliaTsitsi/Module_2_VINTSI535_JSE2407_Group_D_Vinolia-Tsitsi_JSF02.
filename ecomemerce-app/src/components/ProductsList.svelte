@@ -116,7 +116,7 @@
   }
 
   .product-card-button:hover {
-    /* Add hover effects if needed */
+   background-color: azure;
   }
 
   .product-card-button:focus {

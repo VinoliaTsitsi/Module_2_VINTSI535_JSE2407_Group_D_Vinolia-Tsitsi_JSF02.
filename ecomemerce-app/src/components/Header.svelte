@@ -1,64 +1,63 @@
 <script>
-    // @ts-nocheck
     import { onMount } from 'svelte';
     import { navigate } from 'svelte-routing';
 
-    let navbarDropdown;
-
-    const toggleNavbar = () => {
-        if (navbarDropdown.classList.contains('hidden')) {
-            navbarDropdown.classList.remove('hidden');
-        } else {
-            navbarDropdown.classList.add('hidden');
-        }
+    const goToHome = () => {
+        navigate('/');
     };
 
-    onMount(() => {});
+    onMount(() => {
+        // Any logic needed on mount
+    });
 </script>
 
-<header class="header">
+<header>
     <nav class="nav">
         <div class="container">
-            <button on:click={() => navigate('/')} class="brand">
-                <img src="/online-shop.png" class="logo" alt="Flowbite Logo" />
+            <div class="brand" on:click={goToHome}>
+                <img src="/assets/online-shop.png" class="logo" alt="SwiftCart Logo" />
                 <span class="brand-name">SwiftCart</span>
-            </button>
-         
+            </div>
         </div>
     </nav>
 </header>
 
 <style>
-.header {
-    position: sticky;
-    top: 0;
-    z-index: 50;
-}
+    header {
+        /* Any additional styles for the header */
+    }
 
-.nav {
-    background-color: #6b7280;
-    border-color: #d1d5db;
-}
+    .nav {
+        background-color: #6b7280; /* Gray-500 */
+        border-color: #e5e7eb; /* Gray-200 */
+    }
 
-.container {
-    max-width: 1280px;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    margin: 0 auto;
-    padding: 1rem;
-}
+    .container {
+        max-width: 1280px;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        margin: 0 auto;
+        padding: 1rem;
+    }
 
+    .brand {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        text-decoration: none;
+    }
 
-.logo {
-    height: 2rem;
-}
+    .logo {
+        height: 2rem; /* h-8 */
+        margin-right: 0.75rem; /* Space between logo and text */
+    }
 
-.brand-name {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: #ffffff;
-    white-space: nowrap;
-}
+    .brand-name {
+        font-size: 1.5rem; /* text-2xl */
+        font-weight: 600; /* font-semibold */
+        color: #ffffff; /* text-white */
+        white-space: nowrap;
+    }
 </style>
