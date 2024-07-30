@@ -1,79 +1,216 @@
-:root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+/**header component styling**/
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
+.nav {
+  background-color: #6b7280;
+  border-color: #d1d5db;
 }
 
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-.card {
-  padding: 2em;
-}
-
-#app {
+.container {
   max-width: 1280px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
   margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+  padding: 1rem;
 }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
+.brand {
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  height: 2rem;
+}
+
+.brand-name {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #ffffff;
+  white-space: nowrap;
+}
+
+.menu-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0.5rem;
+  color: #ffffff;
+  border-radius: 0.5rem;
+  background-color: #6b7280;
+}
+
+.menu-toggle:hover {
+  background-color: #f3f4f6;
+}
+
+.menu-toggle:focus {
+  outline: none;
+
+}
+
+.menu-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.hidden {
+  display: none;
+}
+
+.dropdown {
+  width: 100%;
+  display: block;
+}
+
+.menu {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  margin-top: 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  background-color: #6b7280;
+}
+
+.menu-item {
+  padding: 0.5rem 1rem;
+  color: #ffffff;
+  border-radius: 0.5rem;
+}
+
+.menu-item:hover {
+  background-color: #f3f4f6;
+  color: #1e40af;
+}
+
+.menu-item-notification {
+  display: none;
+}
+
+.notification {
+  position: absolute;
+  top: -1rem;
+  left: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 1.25rem;
+  width: 1.25rem;
+  background-color: #ef4444;
+  color: #ffffff;
+  border-radius: 50%;
+  padding: 0.75rem;
+  font-size: 0.75rem;
+}
+
+.cart-icon {
+  height: 1.5rem;
+  width: 1.5rem;
+  stroke: #ffffff;
   cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
+@media (min-width: 768px) {
+  .menu-toggle {
+      display: none;
   }
-  a:hover {
-    color: #747bff;
+
+  .dropdown {
+      display: flex;
+      width: auto;
   }
-  button {awqaszzaASAA
-    background-color: #f9f9f9;
+
+  .menu {
+      flex-direction: row;
+      padding: 0;
+      margin-top: 0;
+      border: none;
+      background-color: transparent;
   }
+
+  .menu-item {
+      padding: 0.5rem 0;
+  }
+
+  .menu-item-notification {
+      display: block;
+      position: relative;
+  }
+
+  .menu-item-cart {
+      display: none;
+  }
+}
+
+@media (min-width: 1024px) {
+  .menu-item-cart {
+      display: none;
+  }
+}
+
+/**ProductCard**/
+
+.product-card {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 1rem;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
+}
+
+.product-card:hover {
+  transform: scale(1.05);
+}
+
+.product-image {
+  width: 100%;
+  height: auto;
+  border-radius: 8px 8px 0 0;
+}
+
+.product-title {
+  font-size: 1.2rem;
+  margin: 0.5rem 0;
+}
+
+.product-price {
+  color: #2c3e50;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.add-to-cart {
+  background-color: #3498db;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+
+.add-to-cart:hover {
+  background-color: #2980b9;
+}
+
+/*ProductList*/
+
+div {
+  margin-top: 1rem;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 1rem;
 }
