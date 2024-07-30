@@ -1,12 +1,18 @@
 <script>
     import { onMount } from 'svelte';
     import ProductCard from './ProductCard.svelte';
+  import { navigate } from 'svelte-routing';
   
-  let products = [];
-  let filteredProducts = [];
-  let categories = [];
-  let loading = true;
-  let error = null;
+    let products = [];
+    let filteredProducts = [];
+    let categories = [];
+    let loading = true;
+    let error = null;
+
+
+    let sorting = 'default';
+    let filterItem = 'All categories';
+    let searchTerm = '';
 
 
     const fetchProducts = async () => {
@@ -17,17 +23,45 @@
         if (!response.ok) {
           throw new Error('Failed to fetch products');
         }
-        products = await response.json();
-      } catch (err) {
-        error = err.message;
-      } finally {
-        loading = false;
-      }
+        const data = await response.json();
+      products = data;
+      filteredProducts = data;
+      categories = [...new Set(data.map(product => product.category))];
+    } catch (err) {
+      error = err.message;
+    } finally {
+      loading = false;
+    }
     };
-  
-    onMount(() => {
-      fetchProducts();
-    });
+
+    const sortProducts = () => {
+    if (sorting === 'low') {
+      filteredProducts = [...filteredProducts].sort((a, b) => a.price - b.price);
+    } else if (sorting === 'high') {
+      filteredProducts = [...filteredProducts].sort((a, b) => b.price - a.price);
+    } else {
+      filteredProducts = products;
+    }
+  };
+
+  const filterProducts = () => {
+    filteredProducts = products.filter(product => filterItem === 'All categories' || product.category === filterItem);
+    sortProducts();
+  };
+  const searchProducts = () => {
+    filteredProducts = products.filter(product =>
+      product.title.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    filterProducts();
+  };
+
+  onMount(() => {
+    fetchProducts();
+  });
+
+  const viewProductDetails = (id) => {
+    navigate (`/product/${id}`)
+  };
   </script>
   
   <div>
