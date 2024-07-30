@@ -1,13 +1,19 @@
 <script>
+  import { navigate } from 'svelte-routing'; 
+
     export let product;
+
+    const goToDetail = () => {
+      navigate ( `/product/${product.id}`);
+    };
   </script>
   
-  <div class="product-card">
+  <button class="product-card" on:click={goToDetail} aria-label={`View details for ${product.title}`}>
     <img src={product.image} alt={product.title} class="product-image" />
     <h2 class="product-title">{product.title}</h2>
     <p class="product-price">R{product.price}</p>
     <p class="product-category">Category: {product.category}</p>
-  </div>
+  </button>
   
   <style>
     .product-card {

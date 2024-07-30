@@ -2,10 +2,13 @@
     import { onMount } from 'svelte';
     import ProductCard from './ProductCard.svelte';
   
-    let products = [];
-    let loading = true;
-    let error = null;
-  
+  let products = [];
+  let filteredProducts = [];
+  let categories = [];
+  let loading = true;
+  let error = null;
+
+
     const fetchProducts = async () => {
       loading = true;
       error = null;
