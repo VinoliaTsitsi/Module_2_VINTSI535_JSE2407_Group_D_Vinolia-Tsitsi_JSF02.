@@ -37,20 +37,20 @@
       filteredProducts = [...filteredProducts].sort((a, b) => a.price - b.price);
     } else if (sorting === 'high') {
       filteredProducts = [...filteredProducts].sort((a, b) => b.price - a.price);
-    } else {
-      filteredProducts = products;
     }
   };
 
   const filterProducts = () => {
     filteredProducts = products.filter(product => filterItem === 'All categories' || product.category === filterItem);
+    if (searchTerm) {
+      filteredProducts = filteredProducts.filter(product =>
+        product.title.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
     sortProducts();
   };
 
   const searchProducts = () => {
-    filteredProducts = products.filter(product =>
-      product.title.toLowerCase().includes(searchTerm.toLowerCase())
-    );
     filterProducts();
   };
 
@@ -64,9 +64,9 @@
 </script>
 
 <div>
-  <div class="mb-10 flex justify-between items-center mt-8">
+  <div class="controls mb-10 flex justify-between items-center mt-8">
     <div class="flex space-x-4">
-      <select bind:value={sorting} on:change={sortProducts} class="p-2 border border-gray-300 rounded">
+      <select bind:value={sorting} on:change={filterProducts} class="p-2 border border-gray-300 rounded">
         <option value="default">Default</option>
         <option value="low">Price: Low to High</option>
         <option value="high">Price: High to Low</option>
@@ -80,7 +80,7 @@
       </select>
     </div>
 
-    <input type="text" placeholder="Search" bind:value={searchTerm} on:input={searchProducts} class="p-2 border border-gray-300 rounded-full bg-green-100 placeholder-gray-500 placeholder-opacity-75">
+    <input type="text" placeholder="Search" bind:value={searchTerm} on:input={searchProducts} class="p-2 border border-gray-300 rounded-full bg-green-100 placeholder-gray-500 placeholder-opacity-75 search-bar">
   </div>
 
   {#if loading}
@@ -90,24 +90,64 @@
   {:else if filteredProducts.length === 0}
     <p>No products available.</p>
   {:else}
-  <div class="grid-container">
-    {#each filteredProducts as product (product.id)}
-      <button on:click={() => viewProductDetails(product.id)} class="product-card-button">
-        <ProductCard {product} />
-      </button>
-    {/each}
-  </div>
+    <div class="grid-container">
+      {#each filteredProducts as product (product.id)}
+        <button on:click={() => viewProductDetails(product.id)} class="product-card-button">
+          <ProductCard {product} />
+        </button>
+      {/each}
+    </div>
   {/if}
 </div>
-  
-  <style>
-    div {
-      margin-top: 1rem;
-    }
-  
-    .grid-container {
-     display: grid;
-      grid-template-columns: repeat(6, 1fr);
-      gap: 1rem;
-    }
-  </style>  
+
+<style>
+  .controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+
+  .product-card-button {
+    all: unset;
+    display: block;
+    width: 100%;
+    cursor: pointer;
+  }
+
+  .product-card-button:hover {
+    background-color: bisque;
+  }
+
+  .product-card-button:focus {
+    outline: 2px solid blue; /* Add focus styles for accessibility */
+  }
+
+  .search-bar {
+    margin-left: auto; /* Move search bar to the right */
+  }
+
+  /* Ensure product cards are equal in size */
+  .product-card-button  {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .product-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    border: 1px solid #e0e0e0;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    background-color: white;
+  }
+</style>
